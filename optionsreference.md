@@ -6,7 +6,7 @@ URLs and plugin
 * `schemes`: (array) The transfer protocol of the API ie `['http']`
 * `host`: (string) The host (name or IP) serving the API including port if any i.e. `localhost:8080`
 * `auth`: (boolean, string or object) defines security strategy to use for plugin resources - default: `false`,
-* `cors`: (boolean) weather the swagger.json routes is servered with cors support - default: `false`,
+* `cors`: (boolean) whether the swagger.json routes is servered with cors support - default: `false`,
 
 JSON (JSON endpoint needed to create UI)
 * `jsonPath`: (string) The path of JSON endpoint at describes the API - default: `/swagger.json`
@@ -36,11 +36,12 @@ JSON (JSON endpoint needed to create UI)
 * `documentationRouteTags`: (string or array) Add hapi tags to internal `hapi-swagger` routes - default: `[]`
 *  `consumes`: (array) The mimetypes consumed - default: `['application/json']`
 *  `produces`: (array) The mimetypes produced - default: `['application/json']`
-*  `xProperties`: Adds JOI data that cannot be use directly by swagger as metadata - default: `true`,
-*  `reuseDefinitions`: Reuse of definition models to save space - default: `true`,
-*  `definitionPrefix`: Dynamic naming convention. `default` or `useLabel` - default: `default`,
+*  `xProperties`: Adds JOI data that cannot be use directly by swagger as metadata - default: `true`
+*  `reuseDefinitions`: Reuse of definition models to save space - default: `true`
+*  `definitionPrefix`: Dynamic naming convention. `default` or `useLabel` - default: `default`
 *  `deReference`: Dereferences JSON output - default: `false`,
-*  `debug`: Validates the JSON ouput against swagger specification - default: `false`,
+*  `debug`: Validates the JSON ouput against swagger specification - default: `false`
+* `x-*` (any): any property or object with a key starting with *x-* is included in the swagger definition (similar to `x-*` options in the `info` object).
 
 UI
 * `swaggerUI`: (boolean) Add files that support SwaggerUI. Only removes files if `documentationPage` is also set to false - default: `true`
@@ -48,7 +49,7 @@ UI
 * `documentationPage`: (boolean) Add documentation page - default: `true`
 * `documentationPath`: (string) The path of the documentation page - default: `/documentation`
 * `expanded`: (string) If UI is expanded when opened. `none`, `list` or `full` - default: `list`
-* `jsonEditor`: (boolean) If UI should use JSON Edtior - default: `false`
+* `jsonEditor`: (boolean) If UI should use JSON Editor - default: `false`
 * `sortTags`: (string) a sort method for `tags` i.e. groups in UI. `default` or `name`
 * `sortEndpoints`: (string) a sort method for endpoints in UI. `path`, `method`, `ordered`
 * `lang`: (string) The language of the UI `en`, `es`, `fr`, `it`, `ja`, `pl`, `pt`, `ru`, `tr` or `zh-cn` - default: `en`
@@ -68,6 +69,7 @@ UI
    *  `payload`: (JOI object) allows you to `payload` route documentation outside of HAPI validation
 *  `security`: Hoek.reach(routeOptions, 'security') || null,
 *  `order`: (int) The order in which endpoints are displayed, works with options.sortEndpoints = 'ordered'
+* `x-*` (any): any property or object with a key starting with *x-* is included in the swagger definition (similar to `x-*` options in the `info` object).
 *  `deprecated`: (boolean) Whether a endpoint has been deprecated - default: false
 
 

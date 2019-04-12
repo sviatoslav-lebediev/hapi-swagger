@@ -56,7 +56,7 @@ lab.experiment('property - ', () => {
         expect(propertiesNoAlt.parseProperty('x', Joi.boolean(), null, 'body', true, false)).to.equal({ 'type': 'boolean' });
         expect(propertiesNoAlt.parseProperty('x', Joi.date(), null, 'body', true, false)).to.equal({ 'type': 'string', 'format': 'date' });
         expect(propertiesNoAlt.parseProperty('x', Joi.binary(), null, 'body', true, false)).to.equal({ 'type': 'string', 'format': 'binary' });
-        expect(propertiesNoAlt.parseProperty('x', Joi.array(), null, 'body', true, false)).to.equal({ '$ref': '#/definitions/Model 1', 'type': 'array' });
+        expect(propertiesNoAlt.parseProperty('x', Joi.array(), null, 'body', true, false)).to.equal({ '$ref': '#/definitions/Model 1' });
         expect(propertiesNoAlt.parseProperty('x', Joi.any(), null, 'body', true, false)).to.equal({ 'type': 'string' });
         //expect(propertiesNoAlt.parseProperty('x', Joi.func(), null, 'body', true, false)).to.equal({ 'type': 'string' });
 
@@ -83,6 +83,7 @@ lab.experiment('property - ', () => {
         clearDown();
         expect(propertiesNoAlt.parseProperty('x', Joi.string().description('this is bob'), null, 'body', true, false)).to.equal({ 'type': 'string', 'description': 'this is bob' });
         expect(propertiesAlt.parseProperty('x', Joi.string().example('bob'), null, 'body', true, false)).to.equal({ 'type': 'string', 'example': 'bob' });
+        expect(propertiesAlt.parseProperty('x', Joi.allow('').example(''), null, 'body', true, false)).to.equal({ 'type': 'string', 'example': '' });
 
     });
 
@@ -120,7 +121,7 @@ lab.experiment('property - ', () => {
         expect(propertiesNoAlt.parseProperty('x', Joi.string().max(10), null, 'body', true, false)).to.equal({ 'type': 'string', 'maxLength': 10 });
         expect(propertiesNoAlt.parseProperty('x', Joi.string().regex(/^[a-zA-Z0-9]{3,30}/), null, 'body', true, false)).to.equal({
             'type': 'string',
-            'pattern': '/^[a-zA-Z0-9]{3,30}/'
+            'pattern': '^[a-zA-Z0-9]{3,30}'
         });
 
         expect(propertiesAlt.parseProperty('x', Joi.string().length(0, 'utf8'), null, 'body', true, false)).to.equal({ 'type': 'string', 'x-constraint': { 'length': 0 } });
@@ -182,7 +183,7 @@ lab.experiment('property - ', () => {
        */
 
         expect(propertiesAlt.parseProperty('x', Joi.string().guid(), null, 'body', true, true)).to.equal({ 'type': 'string', 'x-format': { 'guid': true } });
-        expect(propertiesAlt.parseProperty('x', Joi.string().hex(), null, 'body', true, true)).to.equal({ 'type': 'string', 'pattern': '/^[a-f0-9]+$/i', 'x-format': { 'hex': true } });
+        expect(propertiesAlt.parseProperty('x', Joi.string().hex(), null, 'body', true, true)).to.equal({ 'type': 'string', 'pattern': '^[a-f0-9]+$', 'x-format': { 'hex': true } });
         expect(propertiesAlt.parseProperty('x', Joi.string().guid(), null, 'body', true, true)).to.equal({ 'type': 'string', 'x-format': { 'guid': true } });
         expect(propertiesAlt.parseProperty('x', Joi.string().hostname(), null, 'body', true, true)).to.equal({ 'type': 'string', 'x-format': { 'hostname': true } });
         expect(propertiesAlt.parseProperty('x', Joi.string().isoDate(), null, 'body', true, true)).to.equal({ 'type': 'string', 'x-format': { 'isoDate': true } });
@@ -202,6 +203,16 @@ lab.experiment('property - ', () => {
 
         clearDown();
         expect(propertiesNoAlt.parseProperty('x', Joi.date(), null, 'body', true, false)).to.equal({ 'type': 'string', 'format': 'date' });
+
+        expect(propertiesNoAlt.parseProperty('x', Joi.date().min('1-1-1974'), null, 'body', true, false)).to.equal({ 'type': 'string', 'format': 'date' });
+        expect(propertiesNoAlt.parseProperty('x', Joi.date().min('now'), null, 'body', true, false)).to.equal({ 'type': 'string', 'format': 'date' });
+        expect(propertiesNoAlt.parseProperty('x', Joi.date().min(Joi.ref('y')), null, 'body', true, false)).to.equal({ 'type': 'string', 'format': 'date' });
+
+        expect(propertiesNoAlt.parseProperty('x', Joi.date().max('1-1-1974'), null, 'body', true, false)).to.equal({ 'type': 'string', 'format': 'date' });
+        expect(propertiesNoAlt.parseProperty('x', Joi.date().max('now'), null, 'body', true, false)).to.equal({ 'type': 'string', 'format': 'date' });
+        expect(propertiesNoAlt.parseProperty('x', Joi.date().max(Joi.ref('y')), null, 'body', true, false)).to.equal({ 'type': 'string', 'format': 'date' });
+
+        expect(propertiesNoAlt.parseProperty('x', Joi.date().min('1-1-1974').max('now'), null, 'body', true, false)).to.equal({ 'type': 'string', 'format': 'date' });
 
         /*  not yet 'x',
         date.min(date)
@@ -266,8 +277,7 @@ lab.experiment('property - ', () => {
         clearDown();
         //console.log(JSON.stringify(propertiesNoAlt.parseProperty('x', Joi.array().items({ 'text': Joi.string() }), null, 'formData', true, false)));
         expect(propertiesNoAlt.parseProperty('x', Joi.array().items(Joi.string()), null, 'formData', true, false)).to.equal({
-            '$ref': '#/definitions/x',
-            'type': 'array'
+            '$ref': '#/definitions/x'
         });
         //console.log(JSON.stringify(definitionCollection));
         expect(definitionCollection).to.equal({
